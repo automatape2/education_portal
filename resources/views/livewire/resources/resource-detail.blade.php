@@ -71,7 +71,7 @@
         </div>
 
         <!-- Etiquetas -->
-        @if($resource->tags && count($resource->tags) > 0)
+        @if($resource->tags && is_array($resource->tags) && count($resource->tags) > 0)
             <div class="mb-6">
                 <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Etiquetas:</p>
                 <div class="flex flex-wrap gap-2">

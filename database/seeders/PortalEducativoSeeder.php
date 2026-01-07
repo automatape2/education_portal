@@ -243,6 +243,9 @@ class PortalEducativoSeeder extends Seeder
         // Crear 80+ recursos
         for ($i = 1; $i <= 80; $i++) {
             $daysAgo = rand(0, 30);
+            $allTags = ['estudio', 'examen', 'repaso', 'importante', 'recomendado'];
+            $randomTags = array_rand(array_flip($allTags), rand(1, 3));
+            
             Resource::create([
                 'user_id' => $users[array_rand($users)]->id,
                 'title' => $resourceTitles[array_rand($resourceTitles)],
@@ -255,7 +258,7 @@ class PortalEducativoSeeder extends Seeder
                 'career' => ['Medicina', 'Enfermería', 'Odontología', 'Fisioterapia', 'Nutrición'][array_rand(['Medicina', 'Enfermería', 'Odontología', 'Fisioterapia', 'Nutrición'])],
                 'subject' => $subjects[array_rand($subjects)],
                 'semester' => rand(1, 10),
-                'tags' => ['estudio', 'examen', 'repaso', 'importante', 'recomendado'][array_rand(['estudio', 'examen', 'repaso', 'importante', 'recomendado'])],
+                'tags' => is_array($randomTags) ? $randomTags : [$randomTags],
                 'downloads' => rand(5, 350),
                 'is_approved' => true,
                 'created_at' => now()->subDays($daysAgo),
