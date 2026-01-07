@@ -134,7 +134,124 @@
         <!-- Notificaciones en vivo -->
         <livewire:live-notifications />
 
-        {{ $slot }}
+        <!-- Layout tipo Facebook: sidebar izquierdo fijo, contenido central scrollable, sidebar derecho fijo -->
+        <div class="flex fixed inset-0 lg:left-64">
+            <!-- Contenido central scrollable -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-zinc-800">
+                <div class="max-w-[1400px] mx-auto">
+                    {{ $slot }}
+                </div>
+            </main>
+            
+            <!-- Sidebar derecho fijo -->
+            <aside class="hidden xl:block w-80 border-l border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 overflow-y-auto flex-shrink-0">
+                <div class="p-4 space-y-4">
+                    <!-- Usuarios activos -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            Usuarios Activos
+                        </h3>
+                        <div class="space-y-2">
+                            @php
+                                $activeUsers = \App\Models\User::latest('updated_at')->take(8)->get();
+                            @endphp
+                            @foreach($activeUsers as $user)
+                                <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer">
+                                    <div class="relative">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
+                                            {{ substr($user->name, 0, 1) }}
+                                        </div>
+                                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-zinc-900 rounded-full"></span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{{ $user->name }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Activo ahora</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    <!-- Tendencias -->
+                    <div class="pt-4 border-t border-gray-200 dark:border-zinc-700">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                            🔥 Tendencias
+                        </h3>
+                        <div class="space-y-3">
+                            @php
+                                $trendingTopics = \App\Models\ForumTopic::withCount('replies')
+                                    ->orderBy('replies_count', 'desc')
+                                    ->take(5)
+                                    ->get();
+                            @endphp
+                            @foreach($trendingTopics as $topic)
+                                <a href="{{ route('forums.topic', $topic->id) }}" 
+                                   class="block p-3 rounded-lg bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/10 dark:to-red-900/10 hover:shadow-md transition-all">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100 line-clamp-2">{{ $topic->title }}</p>
+                                    <div class="flex items-center gap-3 mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                        <span>💬 {{ $topic->replies_count }} respuestas</span>
+                                        <span>👁️ {{ $topic->views }} vistas</span>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    <!-- Sugerencias -->
+                    <div class="pt-4 border-t border-gray-200 dark:border-zinc-700">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                            ✨ Sugerencias
+                        </h3>
+                        <div class="space-y-3">
+                            @php
+                                $suggestedGroups = \App\Models\StudyGroup::where('is_public', true)
+                                    ->withCount('members')
+                                    ->orderBy('members_count', 'desc')
+                                    ->take(4)
+                                    ->get();
+                            @endphp
+                            @foreach($suggestedGroups as $group)
+                                <div class="p-3 rounded-lg border border-gray-200 dark:border-zinc-700 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-teal-500 flex items-center justify-center text-white font-bold text-lg">
+                                            👥
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 line-clamp-1">{{ $group->name }}</p>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">{{ $group->members_count }} miembros</p>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('study-groups.index') }}" 
+                                       class="mt-3 w-full block text-center py-1.5 px-3 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                                        Unirse
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                    <!-- Estadísticas rápidas -->
+                    <div class="pt-4 border-t border-gray-200 dark:border-zinc-700">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">📊 Hoy en el Portal</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between p-2 rounded bg-gray-50 dark:bg-zinc-800">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Nuevos recursos</span>
+                                <span class="font-bold text-blue-600 dark:text-blue-400">{{ \App\Models\Resource::whereDate('created_at', today())->count() }}</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 rounded bg-gray-50 dark:bg-zinc-800">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Temas activos</span>
+                                <span class="font-bold text-purple-600 dark:text-purple-400">{{ \App\Models\ForumTopic::whereDate('created_at', today())->count() }}</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 rounded bg-gray-50 dark:bg-zinc-800">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Respuestas</span>
+                                <span class="font-bold text-green-600 dark:text-green-400">{{ \App\Models\ForumReply::whereDate('created_at', today())->count() }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
 
         @fluxScripts
     </body>

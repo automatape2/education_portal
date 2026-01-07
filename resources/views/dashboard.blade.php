@@ -56,28 +56,26 @@
             </div>
         </div>
 
-        <!-- Layout de 2 columnas -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Columna principal - Feed de actividad (2/3) -->
-            <div class="lg:col-span-2 space-y-4">
-                <!-- Noticias destacadas tipo carrusel -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">⭐ Destacado Ahora</h2>
-                        <a href="{{ route('news.index') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Ver todas →</a>
-                    </div>
-                    
-                    @php
-                        $featuredNews = \App\Models\News::where('is_published', true)
-                            ->where('is_featured', true)
-                            ->latest('published_at')
-                            ->take(3)
-                            ->get();
-                    @endphp
-                    
-                    <div class="space-y-2">
-                        @foreach($featuredNews as $news)
-                            <a href="{{ route('news.show', $news->id) }}" 
+        <!-- Contenido principal centrado -->
+        <div class="max-w-4xl mx-auto px-4">
+            <!-- Noticias destacadas -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">⭐ Destacado Ahora</h2>
+                    <a href="{{ route('news.index') }}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Ver todas →</a>
+                </div>
+                
+                @php
+                    $featuredNews = \App\Models\News::where('is_published', true)
+                        ->where('is_featured', true)
+                        ->latest('published_at')
+                        ->take(3)
+                        ->get();
+                @endphp
+                
+                <div class="space-y-2">
+                    @foreach($featuredNews as $news)
+                        <a href="{{ route('news.show', $news->id) }}" 
                                class="block p-3 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/10 dark:to-orange-900/10 
                                       border-l-4 border-yellow-500 rounded hover:shadow-md transition-all">
                                 <div class="flex items-start gap-3">
@@ -89,106 +87,12 @@
                                     </div>
                                 </div>
                             </a>
-                        @endforeach
-                    </div>
+                    @endforeach
                 </div>
-                
-                <!-- Feed de Actividad -->
-                <livewire:activity-feed />
             </div>
             
-            <!-- Columna lateral - Accesos rápidos y eventos (1/3) -->
-            <div class="space-y-4">
-                <!-- Accesos rápidos -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">⚡ Acceso Rápido</h3>
-                    <div class="space-y-2">
-                        <a href="{{ route('resources.index') }}" 
-                           class="flex items-center gap-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
-                            <span class="text-2xl">📚</span>
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-900 dark:text-gray-100">Recursos</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">{{ \App\Models\Resource::where('created_at', '>=', now()->subWeek())->count() }} nuevos esta semana</p>
-                            </div>
-                            <span class="text-blue-600 dark:text-blue-400">→</span>
-                        </a>
-                        
-                        <a href="{{ route('forums.index') }}" 
-                           class="flex items-center gap-3 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
-                            <span class="text-2xl">💬</span>
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-900 dark:text-gray-100">Foros</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">{{ \App\Models\ForumTopic::where('created_at', '>=', now()->subDay())->count() }} temas hoy</p>
-                            </div>
-                            <span class="text-purple-600 dark:text-purple-400">→</span>
-                        </a>
-                        
-                        <a href="{{ route('study-groups.index') }}" 
-                           class="flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
-                            <span class="text-2xl">👥</span>
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-900 dark:text-gray-100">Grupos</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">Únete a la comunidad</p>
-                            </div>
-                            <span class="text-green-600 dark:text-green-400">→</span>
-                        </a>
-                        
-                        <a href="{{ route('calendar.index') }}" 
-                           class="flex items-center gap-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors">
-                            <span class="text-2xl">📅</span>
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-900 dark:text-gray-100">Calendario</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-400">{{ \App\Models\Event::where('start_date', '>=', now())->where('start_date', '<=', now()->addWeek())->count() }} eventos esta semana</p>
-                            </div>
-                            <span class="text-orange-600 dark:text-orange-400">→</span>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Eventos próximos -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">📅 Próximos Eventos</h3>
-                    
-                    @php
-                        $upcomingEvents = \App\Models\Event::where('start_date', '>=', now())
-                            ->orderBy('start_date')
-                            ->take(5)
-                            ->get();
-                    @endphp
-                    
-                    <div class="space-y-2">
-                        @forelse($upcomingEvents as $event)
-                            <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-                                <div class="flex gap-3">
-                                    <div class="flex-shrink-0 w-12 h-12 rounded-lg flex flex-col items-center justify-center text-white text-xs font-bold"
-                                         style="background-color: {{ $event->color }}">
-                                        <span>{{ $event->start_date->format('d') }}</span>
-                                        <span class="text-[10px] opacity-75">{{ $event->start_date->format('M') }}</span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="font-semibold text-sm text-gray-900 dark:text-gray-100 line-clamp-1">{{ $event->title }}</h4>
-                                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                                            {{ $event->start_date->format('H:i') }} • {{ $event->location }}
-                                        </p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-500 mt-0.5">
-                                            {{ $event->start_date->diffForHumans() }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No hay eventos próximos</p>
-                        @endforelse
-                    </div>
-                </div>
-                
-                <!-- Banner motivacional -->
-                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-md p-6 text-white text-center">
-                    <p class="text-3xl mb-2">💪</p>
-                    <p class="font-bold text-lg">¡Sigue así!</p>
-                    <p class="text-sm opacity-90 mt-1">Tu dedicación te llevará lejos</p>
-                </div>
-            </div>
+            <!-- Feed de Actividad -->
+            <livewire:activity-feed />
         </div>
     </div>
 </x-layouts.app>
