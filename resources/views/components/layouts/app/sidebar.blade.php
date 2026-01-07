@@ -15,17 +15,22 @@
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                 </flux:navlist.group>
+                
+                <flux:navlist.group :heading="__('Portal Educativo')" class="grid">
+                    <flux:navlist.item :href="route('resources.index')" :current="request()->routeIs('resources.*')" wire:navigate>📚 Recursos</flux:navlist.item>
+                    <flux:navlist.item :href="route('forums.index')" :current="request()->routeIs('forums.*')" wire:navigate>💬 Foros</flux:navlist.item>
+                    <flux:navlist.item :href="route('study-groups.index')" :current="request()->routeIs('study-groups.*')" wire:navigate>👥 Grupos</flux:navlist.item>
+                    <flux:navlist.item :href="route('calendar.index')" :current="request()->routeIs('calendar.*')" wire:navigate>📅 Calendario</flux:navlist.item>
+                    <flux:navlist.item :href="route('news.index')" :current="request()->routeIs('news.*')" wire:navigate>📰 Noticias</flux:navlist.item>
+                    <flux:navlist.item :href="route('search')" :current="request()->routeIs('search')" wire:navigate>🔍 Buscar</flux:navlist.item>
+                </flux:navlist.group>
             </flux:navlist>
 
             <flux:spacer />
 
             <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                {{ __('Documentation') }}
+                <flux:navlist.item icon="user" :href="route('profile.edit')" :current="request()->routeIs('profile.*')" wire:navigate>
+                {{ __('Mi Perfil') }}
                 </flux:navlist.item>
             </flux:navlist>
 
