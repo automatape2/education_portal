@@ -59,6 +59,3 @@ jobs:
             **/package.json
             **/package-lock.json
             **/storage/logs/**
-            **/storage/framework/cache/**
-            **/storage/framework/sessions/**
-            **/storage/framework/views/**
