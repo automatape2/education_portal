@@ -33,7 +33,7 @@ class CustomHandleRequests extends HandleRequests
 
     protected function shouldUseSubdirectory()
     {
-        return config('app.env') === 'production';
+        return config('app.env') === 'production' && str_contains(config('app.url'), '/education_portal');
     }
 
     protected function getDefaultUri()
