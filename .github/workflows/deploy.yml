@@ -59,13 +59,3 @@ jobs:
             **/package.json
             **/package-lock.json
             **/storage/logs/**
-
-      - name: Copy build to automata.pe directory
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: automata.pe
-          username: education_portal
-          password: ${{ secrets.FTP_PASSWORD }}
-          script: |
-            mkdir -p ../automata.pe/education_portal
-            cp -r ~/public_html/public/build ../automata.pe/education_portal/
